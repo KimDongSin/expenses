@@ -1,6 +1,7 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
-const ExpenseContext = createContext();
+export const ExpenseContext = createContext();
 
 export default function ExpenseProvider({ children }) {
   const [expenses, setExpenses] = useState([

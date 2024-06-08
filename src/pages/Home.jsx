@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import MonthNavigation from "../components/MonthNavigation";
 import ExpensesList from "../components/ExpensesList";
 import CreateExpense from "../components/CreateExpense";
+import { ExpenseContext } from "../contexts/ExpenseContext";
 
 const Container = styled.main`
   max-width: 800px;
@@ -19,16 +20,19 @@ export const Section = styled.section`
   padding: 20px;
 `;
 
-export default function Home({ expenses, setExpenses }) {
+export default function Home() {
   // 기본 month값 1로 기본 1월료 표시
   const [month, setMonth] = useState(1);
   // expenses month와 month가 같으면 :: 선택된 해당 월만 표시
+
+  const { expenses, setExpenses } = useContext(ExpenseContext)
+
   const filteredExpenses = expenses.filter((expenses) => expenses.month === month);
 
   return (
     <Container>
       <MonthNavigation month={month} setMonth={setMonth} />
-      <CreateExpense month={month} expenses={expenses} setExpenses={setExpenses} />
+      <CreateExpense month={month} />
       <ExpensesList expenses={filteredExpenses} />
     </Container>
   );
