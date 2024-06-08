@@ -3,6 +3,7 @@ import './App.css'
 import Home from './pages/Home'
 import { useState } from 'react';
 import {v4 as uuidv4} from "uuid";
+import Detail from './pages/Detail';
 
 function App() {
   const [expenses, setExpenses] = useState([
@@ -70,7 +71,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home expenses={expenses} setExpenses={setExpenses} />} />
-          <Route path="/detail" element={<div>디테일</div>} />
+          <Route path="/detail/:id" element={<Detail expenses={expenses} setExpenses={setExpenses} />} />
         </Routes>
       </BrowserRouter>
     </>
