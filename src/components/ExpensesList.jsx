@@ -1,6 +1,8 @@
 import { Section } from "../pages/Home";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { ExpenseContext } from "../contexts/ExpenseContext";
 
 const ExpenseItemList = styled.div`
   display: flex;
@@ -60,7 +62,8 @@ const ExpenseDetails = styled.div`
   }
 `;
 
-export default function ExpenseList({ expenses }) {
+export default function ExpenseList() {
+  const {expenses} = useContext(ExpenseContext);
   const navigate = useNavigate();
 
   console.log(expenses);
