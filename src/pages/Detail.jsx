@@ -1,7 +1,8 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
-import { ExpenseContext } from "../contexts/ExpenseContext";
+import { useSelector, useDispatch } from "react-redux";
+import { deleteExpense, editExpense } from "../redux/slices/expensesSlice";
 
 const Container = styled.div`
   max-width: 800px;
@@ -59,7 +60,8 @@ const BackButton = styled(Button)`
 `;
 
 export default function Detail() {
-  const {expenses, setExpenses} = useContext(ExpenseContext);
+  const expenses = useSelector((state) => state.expenses);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -70,7 +72,7 @@ export default function Detail() {
   const [amount, setAmount] = useState(selectedExpense.amount);
   const [description, setDescription] = useState(selectedExpense.description);
 
-  const editExpense = () => {
+  const handleEdit = () => {
     const datePattern = /^\d{4}-\d{2}-\d{2}$/;
     if (!datePattern.test(date)) {
       alert("날짜를 YYYY-MM-DD 형식으로 입력해주세요.");
@@ -81,27 +83,20 @@ export default function Detail() {
       return;
     }
 
-    const newExpenses = expenses.map((expense) => {
-      if (expense.id !== id) {
-        return expense;
-      } else {
-        return {
-          ...expense,
-          date: date,
-          item: item,
-          amount: amount,
-          description: description,
-        };
-      }
-    });
+    const newExpense = {
+      id: id,
+      date: date,
+      item: item,
+      amount: amount,
+      description: description,
+    };
 
-    setExpenses(newExpenses);
+    dispatch(editExpense(newExpense));
     navigate("/");
   };
 
-  const deleteExpense = () => {
-    const newExpense = expenses.filter((expense) => expense.id !== id); // 삭제한 id를 제외한 나머지 리스트들을 새 배열로 필터링.
-    setExpenses(newExpense);
+  const handleDelete = () => {
+    dispatch(deleteExpense({ id }));
     navigate("/");
   };
 
@@ -148,8 +143,8 @@ export default function Detail() {
         />
       </InputGroup>
       <ButtonGroup>
-        <Button onClick={editExpense}>수정</Button>
-        <Button onClick={deleteExpense} danger="true">
+        <Button onClick={handleEdit}>수정</Button>
+        <Button onClick={handleDelete} danger="true">
           삭제
         </Button>
         <BackButton onClick={() => navigate(-1)}>뒤로 가기</BackButton>

@@ -1,8 +1,7 @@
 import { Section } from "../pages/Home";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { ExpenseContext } from "../contexts/ExpenseContext";
+import { useDispatch, useSelector } from "react-redux";
 
 const ExpenseItemList = styled.div`
   display: flex;
@@ -63,10 +62,8 @@ const ExpenseDetails = styled.div`
 `;
 
 export default function ExpenseList() {
-  const {expenses} = useContext(ExpenseContext);
   const navigate = useNavigate();
-
-  console.log(expenses);
+  const expenses = useSelector((state) => state.expenses);
 
   return (
     <Section>
