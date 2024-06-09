@@ -1,8 +1,9 @@
 import { Section } from "../pages/Home";
 import styled from "styled-components";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { ExpenseContext } from "../contexts/ExpenseContext";
+import { addExpense } from "../redux/slices/expensesSlice";
+import { useDispatch } from "react-redux";
 
 const InputRow = styled.div`
   display: flex;
@@ -47,8 +48,7 @@ const AddButton = styled.button`
 `;
 
 export default function CreateExpense({ month }) {
-
-  const {expenses, setExpenses} = useContext(ExpenseContext);
+  const dispatch = useDispatch();
   // padStart: 현재 문자열의 시작을 다른 문자열로 채워서 주어진 길이를 만족하는 새로운 문자열로 반환한다. => ex) 02
   const [newDate, setNewDate] = useState(
     `2024-${String(month).padStart(2, "0")}-01`
@@ -79,7 +79,9 @@ export default function CreateExpense({ month }) {
       description: newDescription,
     };
 
-    setExpenses([...expenses, newExpense]);
+    dispatch(addExpense(newExpense));
+
+    // setExpenses([...expenses, newExpense]);
     setNewDate(`2024-${String(month).padStart(2, "0")}-01`); // 월이 두자릿수 이하면 0을 붙여줌.
     setNewItem("");
     setNewAmount("");
